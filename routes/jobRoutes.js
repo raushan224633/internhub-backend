@@ -7,7 +7,8 @@ const {
   updateJob,
   deleteJob,
   getAllJobs,
-  getEmployerAnalytics
+  getEmployerAnalytics,
+  getVideoStatus
 } = require('../controllers/jobController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -21,6 +22,7 @@ router.get('/analytics/stats', protect, authorize('employer'), getEmployerAnalyt
 
 // Dynamic routes (must come after specific routes)
 router.get('/:id', getJobById);
+router.get('/:id/video-status', getVideoStatus);
 router.put('/:id', protect, authorize('employer'), updateJob);
 router.delete('/:id', protect, authorize('employer'), deleteJob);
 

@@ -79,6 +79,19 @@ const jobSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
+    },
+    videoUrl: {
+      type: String,
+      default: null
+    },
+    videoStatus: {
+      type: String,
+      enum: ['pending', 'processing', 'completed', 'failed'],
+      default: 'pending'
+    },
+    videoId: {
+      type: String,
+      default: null
     }
   },
   {

@@ -3,6 +3,7 @@ const User = require('../models/User');
 const Application = require('../models/Application');
 const mongoose = require('mongoose');
 const { emitAnalyticsUpdate } = require('../utils/socket'); // Import emit function from utils
+const videoGenerator = require('../utils/videoGenerator');
 
 // @desc    Create a new job posting
 // @route   POST /api/jobs
@@ -16,6 +17,13 @@ exports.createJob = async (req, res) => {
 
     const job = await Job.create(jobData);
 
+    // Generate video asynchronously (don't wait for it)
+    if (process.env.DID_API_KEY && process.env.DID_API_KEY !== 'your_did_api_key_here') {
+      generateJobVideoAsync(job._id, job.description, job.title);
+    } else {
+      console.log('⚠️  D-ID API key not configured. Skipping video generation.');
+    }
+
     // Emit real-time update to employer
     emitAnalyticsUpdate(req.user.id.toString(), {
       type: 'new_job',
@@ -24,7 +32,7 @@ exports.createJob = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Job posted successfully',
+      message: 'Job posted successfully. Video is being generated.',
       data: job
     });
   } catch (error) {
@@ -35,6 +43,67 @@ exports.createJob = async (req, res) => {
     });
   }
 };
+
+// Helper function to generate video asynchronously
+async function generateJobVideoAsync(jobId, description, title) {
+  try {
+    // Start video generation
+    const videoResult = await videoGenerator.generateJobVideo(description, title);
+    
+    // Update job with video ID and status
+    await Job.findByIdAndUpdate(jobId, {
+      videoId: videoResult.videoId,
+      videoStatus: 'processing'
+    });
+
+    // Poll for video completion (D-ID takes 30-60 seconds)
+    pollVideoStatus(jobId, videoResult.videoId);
+  } catch (error) {
+    console.error('Video generation failed for job', jobId, ':', error.message);
+    // Update job with failed status
+    await Job.findByIdAndUpdate(jobId, {
+      videoStatus: 'failed'
+    });
+  }
+}
+
+// Poll video status until ready
+async function pollVideoStatus(jobId, videoId, attempts = 0) {
+  const maxAttempts = 20; // Max 2 minutes
+  const pollInterval = 6000; // 6 seconds
+
+  try {
+    const status = await videoGenerator.checkVideoStatus(videoId);
+
+    if (status.status === 'done') {
+      // Video is ready
+      await Job.findByIdAndUpdate(jobId, {
+        videoUrl: status.videoUrl,
+        videoStatus: 'completed'
+      });
+      console.log('Video ready for job', jobId, ':', status.videoUrl);
+    } else if (status.status === 'error' || status.status === 'rejected') {
+      // Video failed
+      await Job.findByIdAndUpdate(jobId, {
+        videoStatus: 'failed'
+      });
+      console.error('Video failed for job', jobId);
+    } else if (attempts < maxAttempts) {
+      // Still processing, check again
+      setTimeout(() => {
+        pollVideoStatus(jobId, videoId, attempts + 1);
+      }, pollInterval);
+    } else {
+      // Timeout
+      await Job.findByIdAndUpdate(jobId, {
+        videoStatus: 'failed'
+      });
+      console.error('Video generation timeout for job', jobId);
+    }
+  } catch (error) {
+    console.error('Error polling video status:', error.message);
+  }
+}
 
 // @desc    Get all jobs by employer
 // @route   GET /api/jobs/employer
@@ -426,6 +495,37 @@ exports.getEmployerAnalytics = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch analytics'
+    });
+  }
+};
+
+// @desc    Get video status for a job
+// @route   GET /api/jobs/:id/video-status
+// @access  Public
+exports.getVideoStatus = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id).select('videoUrl videoStatus videoId');
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: 'Job not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        videoUrl: job.videoUrl,
+        videoStatus: job.videoStatus,
+        videoId: job.videoId
+      }
+    });
+  } catch (error) {
+    console.error('Get video status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch video status'
     });
   }
 };
