@@ -4,7 +4,9 @@ const {
   getProfile,
   updateProfile,
   changePassword,
-  getUserById
+  getUserById,
+  saveResumeData,
+  getResumeData
 } = require('../controllers/profileController');
 const { protect } = require('../middleware/auth');
 
@@ -12,6 +14,8 @@ const { protect } = require('../middleware/auth');
 router.get('/', protect, getProfile);
 router.put('/', protect, updateProfile);
 router.put('/password', protect, changePassword);
+router.get('/resume', protect, getResumeData);
+router.put('/resume', protect, saveResumeData);
 router.get('/:id', protect, getUserById);
 
 module.exports = router;

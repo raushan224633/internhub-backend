@@ -8,12 +8,14 @@ const {
   deleteJob,
   getAllJobs,
   getEmployerAnalytics,
-  getVideoStatus
+  getVideoStatus,
+  getValidLocations
 } = require('../controllers/jobController');
 const { protect, authorize } = require('../middleware/auth');
 
 // Public routes
 router.get('/', getAllJobs);
+router.get('/locations/list', getValidLocations);
 
 // Protected routes - Employer only
 router.post('/', protect, authorize('employer'), createJob);

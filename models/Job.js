@@ -1,5 +1,57 @@
 const mongoose = require('mongoose');
 
+// List of valid Indian cities for location dropdown
+const VALID_LOCATIONS = [
+  'Mumbai, Maharashtra',
+  'Delhi, NCR',
+  'Bangalore, Karnataka',
+  'Hyderabad, Telangana',
+  'Ahmedabad, Gujarat',
+  'Chennai, Tamil Nadu',
+  'Kolkata, West Bengal',
+  'Pune, Maharashtra',
+  'Jaipur, Rajasthan',
+  'Surat, Gujarat',
+  'Lucknow, Uttar Pradesh',
+  'Kanpur, Uttar Pradesh',
+  'Nagpur, Maharashtra',
+  'Indore, Madhya Pradesh',
+  'Thane, Maharashtra',
+  'Bhopal, Madhya Pradesh',
+  'Visakhapatnam, Andhra Pradesh',
+  'Pimpri-Chinchwad, Maharashtra',
+  'Patna, Bihar',
+  'Vadodara, Gujarat',
+  'Ghaziabad, Uttar Pradesh',
+  'Ludhiana, Punjab',
+  'Agra, Uttar Pradesh',
+  'Nashik, Maharashtra',
+  'Faridabad, Haryana',
+  'Meerut, Uttar Pradesh',
+  'Rajkot, Gujarat',
+  'Varanasi, Uttar Pradesh',
+  'Srinagar, Jammu and Kashmir',
+  'Aurangabad, Maharashtra',
+  'Dhanbad, Jharkhand',
+  'Amritsar, Punjab',
+  'Navi Mumbai, Maharashtra',
+  'Allahabad, Uttar Pradesh',
+  'Ranchi, Jharkhand',
+  'Howrah, West Bengal',
+  'Coimbatore, Tamil Nadu',
+  'Jabalpur, Madhya Pradesh',
+  'Gwalior, Madhya Pradesh',
+  'Vijayawada, Andhra Pradesh',
+  'Jodhpur, Rajasthan',
+  'Madurai, Tamil Nadu',
+  'Raipur, Chhattisgarh',
+  'Kota, Rajasthan',
+  'Chandigarh',
+  'Guwahati, Assam',
+  'Remote',
+  'Work from Home'
+];
+
 const jobSchema = new mongoose.Schema(
   {
     title: {
@@ -33,7 +85,14 @@ const jobSchema = new mongoose.Schema(
     location: {
       type: String,
       required: [true, 'Please provide a location'],
-      trim: true
+      trim: true,
+      validate: {
+        validator: function(v) {
+          // Allow any value for backward compatibility, but recommend from the list
+          return true;
+        },
+        message: 'Please select a valid location'
+      }
     },
     type: {
       type: String,
@@ -98,5 +157,25 @@ const jobSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+// Index for better query performance
+jobSchema.index({ location: 1, status: 1, createdAt: -1 });
+jobSchema.index({ employer: 1, status: 1 });
+
+// Static method to get valid locations
+jobSchema.statics.getValidLocations = function() {
+  return VALID_LOCATIONS;
+};
+
+// Virtual property to check if job has expired
+jobSchema.virtual('isExpired').get(function() {
+  return this.deadline && new Date() > this.deadline;
+});
+
+// Method to format salary for display (if stored as numeric range)
+jobSchema.methods.getFormattedSalary = function() {
+  if (!this.salary) return 'Not specified';
+  return this.salary;
+};
 
 module.exports = mongoose.model('Job', jobSchema);

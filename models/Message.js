@@ -38,6 +38,16 @@ const messageSchema = new mongoose.Schema(
     relatedJob: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Job'
+    },
+    isContactForm: {
+      type: Boolean,
+      default: false
+    },
+    contactFormData: {
+      name: String,
+      email: String,
+      subject: String,
+      message: String
     }
   },
   {

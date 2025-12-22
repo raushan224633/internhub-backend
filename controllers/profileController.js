@@ -160,6 +160,115 @@ exports.changePassword = async (req, res) => {
   }
 };
 
+// @desc    Save resume data
+// @route   PUT /api/profile/resume
+// @access  Private
+exports.saveResumeData = async (req, res) => {
+  try {
+    const { formData, skills, educations, experiences, projects, selectedTemplate } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Update resumeData
+    user.resumeData = {
+      formData: formData || {},
+      skills: skills || [],
+      educations: educations || [],
+      experiences: experiences || [],
+      projects: projects || [],
+      selectedTemplate: selectedTemplate || 1
+    };
+
+    // Also update profile fields if they match
+    if (formData) {
+      if (formData.fullName && formData.fullName !== user.name) {
+        user.name = formData.fullName;
+      }
+      if (formData.email && formData.email !== user.email) {
+        user.email = formData.email;
+      }
+      if (formData.phone && formData.phone !== user.phone) {
+        user.phone = formData.phone;
+      }
+      if (formData.location && formData.location !== user.location) {
+        user.location = formData.location;
+      }
+      if (formData.profileImage && formData.profileImage !== user.avatar) {
+        user.avatar = formData.profileImage;
+      }
+      if (formData.linkedIn !== undefined) user.linkedIn = formData.linkedIn;
+      if (formData.github !== undefined) user.github = formData.github;
+      if (formData.portfolio !== undefined) user.portfolio = formData.portfolio;
+      if (formData.summary !== undefined) user.bio = formData.summary;
+    }
+
+    // Update skills
+    if (skills && skills.length > 0) {
+      user.skills = skills;
+    }
+
+    // Update education if provided
+    if (educations && educations.length > 0) {
+      user.education = educations.map(edu => ({
+        institution: edu.institution || '',
+        degree: edu.degree || '',
+        field: edu.field || '',
+        startDate: edu.startDate ? new Date(edu.startDate) : null,
+        endDate: edu.endDate ? new Date(edu.endDate) : null,
+        current: edu.current || false
+      }));
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Resume saved successfully',
+      data: user.resumeData
+    });
+  } catch (error) {
+    console.error('Save resume error:', error);
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to save resume'
+    });
+  }
+};
+
+// @desc    Get resume data
+// @route   GET /api/profile/resume
+// @access  Private
+exports.getResumeData = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('resumeData');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: user.resumeData || null
+    });
+  } catch (error) {
+    console.error('Get resume error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch resume data'
+    });
+  }
+};
+
 // @desc    Get user by ID
 // @route   GET /api/profile/:id
 // @access  Private

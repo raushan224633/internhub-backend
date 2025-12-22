@@ -529,3 +529,24 @@ exports.getVideoStatus = async (req, res) => {
     });
   }
 };
+
+// @desc    Get valid locations for job posting
+// @route   GET /api/jobs/locations/list
+// @access  Public
+exports.getValidLocations = async (req, res) => {
+  try {
+    const locations = Job.getValidLocations();
+    
+    res.json({
+      success: true,
+      data: locations,
+      count: locations.length
+    });
+  } catch (error) {
+    console.error('Get locations error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch locations'
+    });
+  }
+};

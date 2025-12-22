@@ -87,6 +87,47 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    resumeData: {
+      formData: {
+        fullName: String,
+        email: String,
+        phone: String,
+        location: String,
+        summary: String,
+        profileImage: String,
+        linkedIn: String,
+        github: String,
+        portfolio: String
+      },
+      skills: [String],
+      educations: [{
+        institution: String,
+        degree: String,
+        field: String,
+        startDate: String,
+        endDate: String,
+        current: Boolean
+      }],
+      experiences: [{
+        company: String,
+        position: String,
+        location: String,
+        startDate: String,
+        endDate: String,
+        current: Boolean,
+        description: String
+      }],
+      projects: [{
+        title: String,
+        description: String,
+        technologies: [String],
+        link: String
+      }],
+      selectedTemplate: {
+        type: Number,
+        default: 1
+      }
+    },
     // Employer specific fields
     companyName: {
       type: String,
