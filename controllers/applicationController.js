@@ -340,7 +340,7 @@ exports.updateApplicationStatus = async (req, res) => {
       type: notificationType,
       title: notificationTitle,
       message: notificationMessage,
-      link: `/intern/applied-jobs`,
+      link: `/intern/applied-internship`,
       relatedJob: application.job._id,
       relatedApplication: application._id
     });

@@ -68,7 +68,7 @@ echo ""
 
 # Test 3: Create Job
 echo "3️⃣  Testing Job Creation..."
-JOB_RESPONSE=$(curl -s -X POST "$BASE_URL/jobs" \
+JOB_RESPONSE=$(curl -s -X POST "$BASE_URL/internship" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
@@ -102,23 +102,23 @@ else
 fi
 echo ""
 
-# Test 4: Get Employer Jobs
-echo "4️⃣  Testing Get Employer Jobs..."
-JOBS_RESPONSE=$(curl -s -X GET "$BASE_URL/jobs/employer/my-jobs" \
+# Test 4: Get Employerjobs
+echo "4️⃣  Testing Get Employerjobs..."
+internship_RESPONSE=$(curl -s -X GET "$BASE_URL/internship/employer/my-internship" \
   -H "Authorization: Bearer $TOKEN")
 
-if echo "$JOBS_RESPONSE" | grep -q "success"; then
-    echo -e "${GREEN}✓ Jobs Retrieved Successfully${NC}"
-    JOB_COUNT=$(echo "$JOBS_RESPONSE" | grep -o '"totalJobs":[0-9]*' | cut -d':' -f2)
-    echo "Total Jobs: $JOB_COUNT"
+if echo "$internship_RESPONSE" | grep -q "success"; then
+    echo -e "${GREEN}✓jobs Retrieved Successfully${NC}"
+    JOB_COUNT=$(echo "$internship_RESPONSE" | grep -o '"totalinternship":[0-9]*' | cut -d':' -f2)
+    echo "Totaljobs: $JOB_COUNT"
 else
-    echo -e "${RED}✗ Failed to Get Jobs${NC}"
+    echo -e "${RED}✗ Failed to Getjobs${NC}"
 fi
 echo ""
 
 # Test 5: Get Analytics
 echo "5️⃣  Testing Analytics..."
-ANALYTICS_RESPONSE=$(curl -s -X GET "$BASE_URL/jobs/analytics/stats" \
+ANALYTICS_RESPONSE=$(curl -s -X GET "$BASE_URL/internship/analytics/stats" \
   -H "Authorization: Bearer $TOKEN")
 
 if echo "$ANALYTICS_RESPONSE" | grep -q "success"; then
@@ -177,7 +177,7 @@ echo "All major endpoints tested:"
 echo "  ✓ Health Check"
 echo "  ✓ Authentication (Register/Login)"
 echo "  ✓ Job Creation"
-echo "  ✓ Get Jobs"
+echo "  ✓ Getjobs"
 echo "  ✓ Analytics"
 echo "  ✓ Profile Management"
 echo "  ✓ Messages"

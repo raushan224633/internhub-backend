@@ -85,9 +85,9 @@ Video ready for job 507f1f77bcf86cd799439011: https://d-id-talks-prod.s3.us-west
 5. **Completion** → Video URL saved to MongoDB
 
 ### API Endpoints:
-- `POST /api/jobs` - Creates job & triggers video generation
-- `GET /api/jobs/:id/video-status` - Get video status and URL
-- `GET /api/jobs/:id` - Get job details (includes video data)
+- `POST /api/internship` - Creates job & triggers video generation
+- `GET /api/internship/:id/video-status` - Get video status and URL
+- `GET /api/internship/:id` - Get job details (includes video data)
 
 ### Database Schema (Job Model):
 ```javascript

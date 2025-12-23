@@ -15,7 +15,7 @@ Authorization: Bearer <your_jwt_token>
 
 ## 📋 Table of Contents
 1. [Authentication](#authentication-endpoints)
-2. [Jobs](#jobs-endpoints)
+2. [internship](#internship-endpoints)
 3. [Applications](#applications-endpoints)
 4. [Messages](#messages-endpoints)
 5. [Profile](#profile-endpoints)
@@ -65,10 +65,10 @@ Authorization: Bearer <your_jwt_token>
 
 ---
 
-## 💼 Jobs Endpoints
+## 💼jobs Endpoints
 
-### Get All Jobs (Public)
-**GET** `/jobs?page=1&limit=10&search=developer&location=Delhi&jobType=remote&skills=javascript,react`
+### Get Alljobs (Public)
+**GET** `/internship?page=1&limit=10&search=developer&location=Delhi&jobType=remote&skills=javascript,react`
 
 **Query Parameters:**
 - `page` (optional): Page number
@@ -79,10 +79,10 @@ Authorization: Bearer <your_jwt_token>
 - `skills` (optional): Comma-separated skills
 
 ### Get Job by ID
-**GET** `/jobs/:id`
+**GET** `/internship/:id`
 
 ### Create Job (Employer Only)
-**POST** `/jobs`
+**POST** `/internship`
 **Auth Required:** Employer
 
 **Body:**
@@ -109,8 +109,8 @@ Authorization: Bearer <your_jwt_token>
 }
 ```
 
-### Get Employer's Jobs
-**GET** `/jobs/employer/my-jobs?status=active&page=1&limit=10`
+### Get Employer'sjobs
+**GET** `/internship/employer/my-internship?status=active&page=1&limit=10`
 **Auth Required:** Employer
 
 **Query Parameters:**
@@ -119,7 +119,7 @@ Authorization: Bearer <your_jwt_token>
 - `limit` (optional): Items per page
 
 ### Get Employer Analytics
-**GET** `/jobs/analytics/stats`
+**GET** `/internship/analytics/stats`
 **Auth Required:** Employer
 
 **Response:**
@@ -127,7 +127,7 @@ Authorization: Bearer <your_jwt_token>
 {
   "success": true,
   "data": {
-    "jobs": {
+    "internship": {
       "total": 10,
       "active": 7,
       "closed": 3
@@ -139,20 +139,20 @@ Authorization: Bearer <your_jwt_token>
       "rejected": 15,
       "recent": 8
     },
-    "topJobs": [...],
+    "topinternship": [...],
     "applicationsTrend": [...]
   }
 }
 ```
 
 ### Update Job
-**PUT** `/jobs/:id`
+**PUT** `/internship/:id`
 **Auth Required:** Employer (Job Owner)
 
 **Body:** Same as create job (partial updates allowed)
 
 ### Delete Job
-**DELETE** `/jobs/:id`
+**DELETE** `/internship/:id`
 **Auth Required:** Employer (Job Owner)
 
 ---
@@ -409,7 +409,7 @@ Authorization: Bearer <your_jwt_token>
   "pagination": {
     "currentPage": 1,
     "totalPages": 10,
-    "totalJobs": 95,
+    "totalinternship": 95,
     "limit": 10
   }
 }

@@ -211,7 +211,7 @@ const sendContactFormAutoReply = async ({ name, email, subject }) => {
               </div>
 
               <div class="footer">
-                <p><strong>InternShell</strong> - Your Gateway to Internship Opportunities</p>
+                <p><strong>InternShell</strong> - Your Gateway tojobs Opportunities</p>
                 <p>1-A Prem Nagar, Thana Sanganer, Jaipur - 302029</p>
                 <p>Email: support@internshell.com | Phone: +91 8384935940</p>
               </div>
@@ -233,7 +233,7 @@ Best regards,
 InternShell Team
 
 ---
-InternShell - Your Gateway to Internship Opportunities
+InternShell - Your Gateway tojobs Opportunities
 1-A Prem Nagar, Thana Sanganer, Jaipur - 302029
 Email: support@internshell.com | Phone: +91 8384935940
     `

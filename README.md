@@ -1,6 +1,6 @@
 # materially  Backend API
 
-Backend server for materially  - Internship Management Platform
+Backend server for materially  -jobs Management Platform
 
 ## 🚀 Technology Stack
 

@@ -10,7 +10,7 @@ Aapka backend code ab Git repository mein hai. Ab aapko yeh steps follow karne h
 1. **GitHub pe jaye**: https://github.com/new
 2. **Repository details**:
    - Repository name: `internhub-backend`
-   - Description: `Backend API for InternHub - Internship Management Platform`
+   - Description: `Backend API for InternHub -jobs Management Platform`
    - Visibility: Public (ya Private agar chahein)
    - **❌ README, .gitignore ya license ADD MAT KARNA** (already hai)
 3. **Create repository** button click kare

@@ -1,7 +1,7 @@
 {
   "name": "materially -backend",
   "version": "1.0.0",
-  "description": "Backend API for materially  - Internship Management Platform",
+  "description": "Backend API for materially  -jobs Management Platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

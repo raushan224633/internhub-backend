@@ -1,6 +1,6 @@
 # materially  Backend - Complete & Production Ready 🚀
 
-Complete backend system for materially  - Internship Management Platform with full data flow.
+Complete backend system for materially  -jobs Management Platform with full data flow.
 
 ## ✅ What's Been Built
 
@@ -15,7 +15,7 @@ Complete backend system for materially  - Internship Management Platform with fu
 
 **All Employer Pages Covered:**
 1. ✅ Analytics Dashboard - Real-time stats & trends
-2. ✅ My Jobs - Job management with application counts
+2. ✅ Myjobs - Job management with application counts
 3. ✅ Applicants - Application tracking & status updates
 4. ✅ Post New Job - Create & publish job postings
 5. ✅ Messages - Communication system
@@ -77,7 +77,7 @@ http://localhost:5000/api
 **Authentication** (`/api/auth`)
 - Register, Login, Get Current User
 
-**Jobs** (`/api/jobs`)
+**internship** (`/api/internship`)
 - CRUD operations, Analytics, Search & Filter
 
 **Applications** (`/api/applications`)
@@ -95,20 +95,20 @@ http://localhost:5000/api
 
 ### 1. Analytics API
 ```javascript
-GET /api/jobs/analytics/stats
+GET /api/internship/analytics/stats
 
 Response:
 {
-  jobs: { total, active, closed },
+ jobs: { total, active, closed },
   applications: { total, pending, shortlisted, rejected },
-  topJobs: [...],
+  topinternship: [...],
   applicationsTrend: [...]
 }
 ```
 
-### 2. My Jobs API
+### 2. Myjobs API
 ```javascript
-GET /api/jobs/employer/my-jobs?status=active&page=1
+GET /api/internship/employer/my-internship?status=active&page=1
 
 Response:
 {
@@ -133,7 +133,7 @@ Response: List of applications with applicant details
 
 ### 4. Post Job API
 ```javascript
-POST /api/jobs
+POST /api/internship
 Body: { title, company, description, ... }
 ```
 
@@ -225,7 +225,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 
 ### 3. Test Protected Route
 ```bash
-curl http://localhost:5000/api/jobs/employer/my-jobs \
+curl http://localhost:5000/api/internship/employer/my-internship \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -242,8 +242,8 @@ import { jobAPI, applicationAPI, messageAPI, profileAPI } from '@/services/api';
 // Get Analytics
 const analytics = await jobAPI.getAnalytics();
 
-// Get Jobs
-const jobs = await jobAPI.getEmployerJobs({ status: 'active', page: 1 });
+// Getjobs
+constjobs = await jobAPI.getEmployerinternship({ status: 'active', page: 1 });
 
 // Get Applications
 const apps = await applicationAPI.getEmployerApplications({ status: 'pending' });

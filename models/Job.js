@@ -52,7 +52,7 @@ const VALID_LOCATIONS = [
   'Work from Home'
 ];
 
-const jobSchema = new mongoose.Schema(
+const jobschema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -159,23 +159,23 @@ const jobSchema = new mongoose.Schema(
 );
 
 // Index for better query performance
-jobSchema.index({ location: 1, status: 1, createdAt: -1 });
-jobSchema.index({ employer: 1, status: 1 });
+jobschema.index({ location: 1, status: 1, createdAt: -1 });
+jobschema.index({ employer: 1, status: 1 });
 
 // Static method to get valid locations
-jobSchema.statics.getValidLocations = function() {
+jobschema.statics.getValidLocations = function() {
   return VALID_LOCATIONS;
 };
 
 // Virtual property to check if job has expired
-jobSchema.virtual('isExpired').get(function() {
+jobschema.virtual('isExpired').get(function() {
   return this.deadline && new Date() > this.deadline;
 });
 
 // Method to format salary for display (if stored as numeric range)
-jobSchema.methods.getFormattedSalary = function() {
+jobschema.methods.getFormattedSalary = function() {
   if (!this.salary) return 'Not specified';
   return this.salary;
 };
 
-module.exports = mongoose.model('Job', jobSchema);
+module.exports = mongoose.model('Job', jobschema);

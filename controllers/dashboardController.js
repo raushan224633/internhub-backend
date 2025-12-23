@@ -68,8 +68,8 @@ exports.getInternDashboardStats = async (req, res) => {
       }
     ]);
 
-    // Get total jobs available
-    const totalJobsAvailable = await Job.countDocuments({
+    // Get totaljobs available
+    const totalinternshipAvailable = await Job.countDocuments({
       status: 'open'
     });
 
@@ -113,7 +113,7 @@ exports.getInternDashboardStats = async (req, res) => {
           shortlisted: shortlistedCount,
           interviewScheduled: interviewCount,
           pendingApplications: statusCounts['pending'] || 0,
-          totalJobsAvailable,
+          totalinternshipAvailable,
           profileViews,
           resumeViews,
           unreadMessages,
@@ -140,26 +140,26 @@ exports.getEmployerDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Get employer's jobs
-    const totalJobs = await Job.countDocuments({
+    // Get employer'sjobs
+    const totalinternship = await Job.countDocuments({
       employer: userId
     });
 
-    const activeJobs = await Job.countDocuments({
+    const activeinternship = await Job.countDocuments({
       employer: userId,
       status: 'open'
     });
 
-    const closedJobs = await Job.countDocuments({
+    const closedinternship = await Job.countDocuments({
       employer: userId,
       status: 'closed'
     });
 
-    // Get total applications for employer's jobs
+    // Get total applications for employer'sjobs
     const applications = await Application.aggregate([
       {
         $lookup: {
-          from: 'jobs',
+          from: 'internship',
           localField: 'job',
           foreignField: '_id',
           as: 'jobData'
@@ -189,7 +189,7 @@ exports.getEmployerDashboardStats = async (req, res) => {
     const recentApplications = await Application.aggregate([
       {
         $lookup: {
-          from: 'jobs',
+          from: 'internship',
           localField: 'job',
           foreignField: '_id',
           as: 'jobData'
@@ -232,7 +232,7 @@ exports.getEmployerDashboardStats = async (req, res) => {
     const applicationTrend = await Application.aggregate([
       {
         $lookup: {
-          from: 'jobs',
+          from: 'internship',
           localField: 'job',
           foreignField: '_id',
           as: 'jobData'
@@ -261,9 +261,9 @@ exports.getEmployerDashboardStats = async (req, res) => {
       success: true,
       data: {
         stats: {
-          totalJobs,
-          activeJobs,
-          closedJobs,
+          totalinternship,
+          activeinternship,
+          closedinternship,
           totalApplications,
           approved: applicationCounts['approved'] || 0,
           rejected: applicationCounts['rejected'] || 0,
@@ -314,8 +314,8 @@ exports.getActivityStats = async (req, res) => {
       });
     } else if (user.role === 'employer') {
       // Employer activities
-      const jobs = await Job.find({ employer: userId }, '_id');
-      const jobIds = jobs.map(j => j._id);
+      constjobs = await Job.find({ employer: userId }, '_id');
+      const jobIds =jobs.map(j => j._id);
 
       activities.applicationsReceived = await Application.countDocuments({
         job: { $in: jobIds },

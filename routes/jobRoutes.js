@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const {
   createJob,
-  getEmployerJobs,
+  getEmployerinternship,
   getJobById,
   updateJob,
   deleteJob,
-  getAllJobs,
+  getAllinternship,
   getEmployerAnalytics,
   getVideoStatus,
   getValidLocations
@@ -14,12 +14,12 @@ const {
 const { protect, authorize } = require('../middleware/auth');
 
 // Public routes
-router.get('/', getAllJobs);
+router.get('/', getAllinternship);
 router.get('/locations/list', getValidLocations);
 
 // Protected routes - Employer only
 router.post('/', protect, authorize('employer'), createJob);
-router.get('/employer/my-jobs', protect, authorize('employer'), getEmployerJobs);
+router.get('/employer/my-internship', protect, authorize('employer'), getEmployerinternship);
 router.get('/analytics/stats', protect, authorize('employer'), getEmployerAnalytics);
 
 // Dynamic routes (must come after specific routes)

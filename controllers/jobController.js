@@ -6,7 +6,7 @@ const { emitAnalyticsUpdate } = require('../utils/socket'); // Import emit funct
 const videoGenerator = require('../utils/videoGenerator');
 
 // @desc    Create a new job posting
-// @route   POST /api/jobs
+// @route   POST /api/internship
 // @access  Private (Employer)
 exports.createJob = async (req, res) => {
   try {
@@ -105,10 +105,10 @@ async function pollVideoStatus(jobId, videoId, attempts = 0) {
   }
 }
 
-// @desc    Get all jobs by employer
-// @route   GET /api/jobs/employer
+// @desc    Get alljobs by employer
+// @route   GET /api/internship/employer
 // @access  Private (Employer)
-exports.getEmployerJobs = async (req, res) => {
+exports.getEmployerinternship = async (req, res) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
     
@@ -158,21 +158,21 @@ exports.getEmployerJobs = async (req, res) => {
       pagination: {
         currentPage: parseInt(page),
         totalPages: Math.ceil(total / limit),
-        totalJobs: total,
+        totalinternship: total,
         limit: parseInt(limit)
       }
     });
   } catch (error) {
-    console.error('Get employer jobs error:', error);
+    console.error('Get employerjobs error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch jobs'
+      message: 'Failed to fetchjobs'
     });
   }
 };
 
 // @desc    Get single job by ID
-// @route   GET /api/jobs/:id
+// @route   GET /api/internship/:id
 // @access  Private
 exports.getJobById = async (req, res) => {
   try {
@@ -201,7 +201,7 @@ exports.getJobById = async (req, res) => {
 };
 
 // @desc    Update job
-// @route   PUT /api/jobs/:id
+// @route   PUT /api/internship/:id
 // @access  Private (Employer)
 exports.updateJob = async (req, res) => {
   try {
@@ -252,7 +252,7 @@ exports.updateJob = async (req, res) => {
 };
 
 // @desc    Delete job
-// @route   DELETE /api/jobs/:id
+// @route   DELETE /api/internship/:id
 // @access  Private (Employer)
 exports.deleteJob = async (req, res) => {
   try {
@@ -297,10 +297,10 @@ exports.deleteJob = async (req, res) => {
   }
 };
 
-// @desc    Get all active jobs (Public)
-// @route   GET /api/jobs
+// @desc    Get all activejobs (Public)
+// @route   GET /api/internship
 // @access  Public
-exports.getAllJobs = async (req, res) => {
+exports.getAllinternship = async (req, res) => {
   try {
     const { 
       page = 1, 
@@ -352,33 +352,33 @@ exports.getAllJobs = async (req, res) => {
       pagination: {
         currentPage: parseInt(page),
         totalPages: Math.ceil(total / limit),
-        totalJobs: total,
+        totalinternship: total,
         limit: parseInt(limit)
       }
     });
   } catch (error) {
-    console.error('Get all jobs error:', error);
+    console.error('Get alljobs error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch jobs'
+      message: 'Failed to fetchjobs'
     });
   }
 };
 
 // @desc    Get employer analytics
-// @route   GET /api/jobs/analytics/stats
+// @route   GET /api/internship/analytics/stats
 // @access  Private (Employer)
 exports.getEmployerAnalytics = async (req, res) => {
   try {
     const employerId = req.user.id;
 
-    // Total jobs
-    const totalJobs = await Job.countDocuments({ employer: employerId });
-    const activeJobs = await Job.countDocuments({ 
+    // Totaljobs
+    const totalinternship = await Job.countDocuments({ employer: employerId });
+    const activeinternship = await Job.countDocuments({ 
       employer: employerId, 
       status: 'active' 
     });
-    const closedJobs = await Job.countDocuments({ 
+    const closedinternship = await Job.countDocuments({ 
       employer: employerId, 
       status: 'closed' 
     });
@@ -419,8 +419,8 @@ exports.getEmployerAnalytics = async (req, res) => {
       createdAt: { $gte: sevenDaysAgo }
     }).select('createdAt status').sort({ createdAt: -1 });
 
-    // Top performing jobs
-    const topJobs = await Application.aggregate([
+    // Top performingjobs
+    const topinternship = await Application.aggregate([
       { $match: { employer: new mongoose.Types.ObjectId(employerId) } },
       { 
         $group: { 
@@ -432,7 +432,7 @@ exports.getEmployerAnalytics = async (req, res) => {
       { $limit: 5 },
       {
         $lookup: {
-          from: 'jobs',
+          from: 'internship',
           localField: '_id',
           foreignField: '_id',
           as: 'jobDetails'
@@ -472,10 +472,10 @@ exports.getEmployerAnalytics = async (req, res) => {
     res.json({
       success: true,
       data: {
-        jobs: {
-          total: totalJobs,
-          active: activeJobs,
-          closed: closedJobs
+       jobs: {
+          total: totalinternship,
+          active: activeinternship,
+          closed: closedinternship
         },
         applications: {
           total: totalApplications,
@@ -486,7 +486,7 @@ exports.getEmployerAnalytics = async (req, res) => {
           recent: recentApplicationsCount
         },
         recentApplications: recentApplicationsList,
-        topJobs,
+        topinternship,
         applicationsTrend
       }
     });
@@ -500,7 +500,7 @@ exports.getEmployerAnalytics = async (req, res) => {
 };
 
 // @desc    Get video status for a job
-// @route   GET /api/jobs/:id/video-status
+// @route   GET /api/internship/:id/video-status
 // @access  Public
 exports.getVideoStatus = async (req, res) => {
   try {
@@ -531,7 +531,7 @@ exports.getVideoStatus = async (req, res) => {
 };
 
 // @desc    Get valid locations for job posting
-// @route   GET /api/jobs/locations/list
+// @route   GET /api/internship/locations/list
 // @access  Public
 exports.getValidLocations = async (req, res) => {
   try {

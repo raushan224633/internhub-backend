@@ -8,13 +8,13 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// Regenerate videos for existing jobs
-async function regenerateVideosForExistingJobs() {
+// Regenerate videos for existingjobs
+async function regenerateVideosForExistinginternship() {
   try {
-    console.log('🔍 Finding jobs without videos...\n');
+    console.log('🔍 Findingjobs without videos...\n');
 
-    // Find all active jobs that don't have a video or failed
-    const jobs = await Job.find({
+    // Find all activejobs that don't have a video or failed
+    constjobs = await Job.find({
       status: 'active',
       $or: [
         { videoUrl: null },
@@ -24,10 +24,10 @@ async function regenerateVideosForExistingJobs() {
       ]
     }).select('_id title description');
 
-    console.log(`📊 Found ${jobs.length} jobs that need videos\n`);
+    console.log(`📊 Found ${internship.length}jobs that need videos\n`);
 
-    if (jobs.length === 0) {
-      console.log('✅ All active jobs already have videos!');
+    if (internship.length === 0) {
+      console.log('✅ All activejobs already have videos!');
       process.exit(0);
     }
 
@@ -35,9 +35,9 @@ async function regenerateVideosForExistingJobs() {
     let successCount = 0;
     let failCount = 0;
 
-    for (let i = 0; i < jobs.length; i++) {
-      const job = jobs[i];
-      console.log(`\n[${i + 1}/${jobs.length}] Processing: ${job.title}`);
+    for (let i = 0; i <jobs.length; i++) {
+      const job =jobs[i];
+      console.log(`\n[${i + 1}/${internship.length}] Processing: ${job.title}`);
       console.log(`Job ID: ${job._id}`);
 
       try {
@@ -62,7 +62,7 @@ async function regenerateVideosForExistingJobs() {
         successCount++;
         
         // Wait 2 seconds between requests to avoid rate limiting
-        if (i < jobs.length - 1) {
+        if (i <jobs.length - 1) {
           console.log('  ⏳ Waiting 2 seconds before next job...');
           await new Promise(resolve => setTimeout(resolve, 2000));
         }
@@ -146,4 +146,4 @@ if (!process.env.DID_API_KEY) {
 }
 
 console.log('✅ D-ID API key found\n');
-regenerateVideosForExistingJobs();
+regenerateVideosForExistinginternship();

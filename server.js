@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/jobs', require('./routes/jobRoutes'));
+app.use('/api/internship', require('./routes/jobRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       auth: '/api/auth',
-      jobs: '/api/jobs',
+     jobs: '/api/internship',
       applications: '/api/applications',
       messages: '/api/messages',
       profile: '/api/profile',
@@ -119,7 +119,7 @@ const server = app.listen(PORT, () => {
 ║   → http://localhost:${PORT}                            ║
 ║   → http://localhost:${PORT}/api/health                 ║
 ║   → http://localhost:${PORT}/api/auth                   ║
-║   → http://localhost:${PORT}/api/jobs                   ║
+║   → http://localhost:${PORT}/api/internship                   ║
 ║   → http://localhost:${PORT}/api/applications           ║
 ║   → http://localhost:${PORT}/api/messages               ║
 ║   → http://localhost:${PORT}/api/profile                ║
