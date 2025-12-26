@@ -56,21 +56,23 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/ats', require('./routes/atsRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
 // Welcome route
 app.get('/', (req, res) => {
   res.json({
     success: true,
-    message: 'Welcome to materially  API',
-    version: '1.0.0',
+    message: 'Welcome to InternShell API with AI-powered suggestions',
+    version: '2.0.0',
     endpoints: {
       auth: '/api/auth',
-     jobs: '/api/internship',
+      jobs: '/api/internship',
       applications: '/api/applications',
       messages: '/api/messages',
       profile: '/api/profile',
       ats: '/api/ats',
       notifications: '/api/notifications',
+      ai: '/api/ai',
       documentation: 'Coming soon...'
     }
   });
